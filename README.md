@@ -56,7 +56,7 @@ Build a **one-page** experience:
    [Mock Product page](https://www.figma.com/design/9wQgbxJWDt3q8HzQsZtY3a/Mock-Product-page)
 
 3. **Shopping assistant (chat)**  
-   Let the user ask questions about the catalog. Answers must come from **Gemini**, with responses **grounded in the product data you fetched** — not generic ecommerce knowledge. Implement the Gemini call from **Nuxt server routes** (`server/api/...`) so the API key never ships to the client.
+   Let the user ask questions about the catalog. Answers must come from **Gemini**, with responses **grounded in the product data you fetched** — not generic ecommerce knowledge.
 
 4. **Grounding rule**  
    If something is **not** in the loaded catalog data, the assistant should say it is not in the catalog (no invented SKUs, prices, or products).
@@ -64,20 +64,20 @@ Build a **one-page** experience:
 5. **Replace the starter**  
    The default [`pages/index.vue`](pages/index.vue) is a placeholder; replace it with your implementation.
 
-## Chatbot testing (during the interview)
+## Chatbot testing
 
-On the call we will **use the assistant like a shopper**: ask about specific products, compare options, probe details that only appear in the JSON (price, availability, descriptions, reviews, policies—whatever you surface in context), and occasionally ask about **things that are not in your loaded catalog**. We are not publishing a fixed script; the goal is to see whether answers **feel consistent with the data you actually have** rather than generic shop talk.
+We will **use the assistant like a shopper**: ask about specific products, compare options, probe details that only appear in the JSON (price, availability, descriptions, reviews, policies—whatever you surface in context), and occasionally ask about **things that are not in your loaded catalog**. We are not publishing a fixed script; the goal is to see whether answers **feel consistent with the data you actually have** rather than generic shop talk.
 
 ## Acceptance criteria (directional)
 
-These are **guides**, not a rigid checklist—priorities may shift on the call.
+These are **guides**.
 
-- **Catalog + UI:** Products come from DummyJSON; the page reads as a coherent storefront and is **reasonably aligned** with the Figma (exact pixel-perfect match is not required unless agreed live).
+- **Catalog + UI:** Products come from DummyJSON; the page reads as a coherent storefront and is **aligned** with the Figma.
 - **Assistant:** Chat goes through **your server**; the model is given enough catalog context to answer; replies should **track the dataset** (including saying when something is unknown or not in the catalog).
 - **UX:** Obvious states (e.g. loading / failure / empty) are handled in a way you can explain; the flow is usable end-to-end for the demo.
 - **Security:** Gemini credentials stay **server-side** only.
 
-We may ask you to **walk through** how context is built, how errors are handled, and what you would tighten with more time.
+We will ask you to **walk through** how context is built, how errors are handled, and what you would tighten with more time.
 
 ## Architecture (what you implement)
 
