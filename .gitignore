@@ -28,3 +28,6 @@ logs
 
 # Local
 *.local
+
+# Design references
+design
