@@ -6,7 +6,7 @@
       <NuxtPage />
     </main>
 
-    <aside class="flex w-[360px] h-[50dvh] shrink-0 items-stretch border-l border-slate-300/70 bg-[#f1f3f6] p-5">
+    <aside class="flex w-[360px] h-[920px] max-h-[90dvh] shrink-0 items-stretch p-5">
       <ChatbotInterface class="h-full" />
     </aside>
   </div>
