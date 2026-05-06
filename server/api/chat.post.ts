@@ -25,6 +25,10 @@ type GroundingProduct = {
   shippingInformation: string | null
   warrantyInformation: string | null
   returnPolicy: string | null
+  reviews: Array<{
+    rating: number | null
+    comment: string
+  }>
 }
 
 const MAX_HISTORY_MESSAGES = 10
@@ -116,51 +120,56 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const history = normalizeHistory(body.history)
-  const config = useRuntimeConfig(event)
-  // Fetching the whole catalog on every request is not ideal for performance, but it ensures the data is always up to date,
-  // specially the availability status, which is important for the user experience and can change frequently. 
-  const catalog = await fetchCatalog()
-  const groundingProducts = toGroundingProducts(catalog.products)
+  try {
+    const history = normalizeHistory(body.history)
+    const config = useRuntimeConfig(event)
+    // Fetching the whole catalog on every request is not ideal for performance, but it ensures the data is always up to date,
+    // specially the availability status, which is important for the user experience and can change frequently. 
+    const catalog = await fetchCatalog()
+    const groundingProducts = toGroundingProducts(catalog.products)
 
-  const catalogContext = JSON.stringify(groundingProducts)
-  const historyContext = history.map(message => `${message.role}: ${message.content}`).join('\n')
-  const geminiPrompt = [
-    'CATALOG:',
-    catalogContext,
-    '',
-    historyContext ? 'CONVERSATION_HISTORY:' : '',
-    historyContext,
-    '',
-    `USER_QUESTION: ${prompt}`,
-    '',
-    'Reply ONLY with valid JSON: {"answer":"...","sources":["SKU-1","SKU-2"]}.',
-    `If requested information does not exist in CATALOG, answer must be exactly "${FIXED_NOT_IN_CATALOG_REPLY}" and sources must be an empty array.`,
-    'Never invent products, SKUs, prices, or fields not present in CATALOG.',
-  ].filter(Boolean).join('\n')
+    const catalogContext = JSON.stringify(groundingProducts)
+    const historyContext = history.map(message => `${message.role}: ${message.content}`).join('\n')
+    const geminiPrompt = [
+      'CATALOG:',
+      catalogContext,
+      '',
+      historyContext ? 'CONVERSATION_HISTORY:' : '',
+      historyContext,
+      '',
+      `USER_QUESTION: ${prompt}`,
+      '',
+      'Reply ONLY with valid JSON: {"answer":"...","sources":["SKU-1","SKU-2"]}.',
+      `If requested information does not exist in CATALOG, answer must be exactly "${FIXED_NOT_IN_CATALOG_REPLY}" and sources must be an empty array.`,
+      'Never invent products, SKUs, prices, or fields not present in CATALOG.',
+    ].filter(Boolean).join('\n')
 
-  const gemini = new GeminiService(event)
-  const rawReply = await gemini.prompt(geminiPrompt, {
-    model: typeof config.geminiModel === 'string' ? config.geminiModel : undefined,
-    temperature: 0.2,
-    responseMimeType: 'application/json',
-    systemInstruction: [
-      'You are a catalog-grounded shopping assistant.',
-      'Use only provided catalog data.',
-      `When data is missing, answer exactly "${FIXED_NOT_IN_CATALOG_REPLY}".`,
-      'Always include only real SKU values from the provided catalog in sources.',
-    ].join(' '),
-  }).catch(error => {
-    console.error('Gemini API error:', error)
+    const gemini = new GeminiService(event)
+    const rawReply = await gemini.prompt(geminiPrompt, {
+      model: typeof config.geminiModel === 'string' ? config.geminiModel : undefined,
+      temperature: 0.2,
+      responseMimeType: 'application/json',
+      systemInstruction: [
+        'You are a catalog-grounded shopping assistant.',
+        'Use only provided catalog data.',
+        `When data is missing, answer exactly "${FIXED_NOT_IN_CATALOG_REPLY}".`,
+        'Always include only real SKU values from the provided catalog in sources.',
+      ].join(' '),
+    })
+
+    const parsed = parseJsonReply(rawReply)
+
+    return {
+      reply: parsed.answer,
+      sources: parsed.sources,
+    }
+  } catch (error) {
+    // We log the error for debugging purposes, but we return a generic error message to 
+    // the client to avoid exposing sensitive information or implementation details.
+    console.error('Chat API error:', error)
     throw createError({
       statusCode: 500,
-      statusMessage: 'Error generating response from Gemini',
+      statusMessage: 'Error generating response from Chat Assistant',
     })
-  })
-  const parsed = parseJsonReply(rawReply)
-
-  return {
-    reply: parsed.answer,
-    sources: parsed.sources,
   }
 })
