@@ -46,7 +46,7 @@ const submitPrompt = async () => {
           <svg viewBox="0 0 24 24" class="h-6 w-6 text-blue-500" fill="currentColor" aria-hidden="true">
             <path d="M12 2c1.8 4.4 5.6 8.2 10 10-4.4 1.8-8.2 5.6-10 10-1.8-4.4-5.6-8.2-10-10 4.4-1.8 8.2-5.6 10-10z" />
           </svg>
-          <h1 class="text-3xl font-medium tracking-tight">Helper</h1>
+          <h1 class="text-xl font-medium tracking-tight">Helper</h1>
         </div>
         <div class="flex items-center gap-4 text-zinc-700">
           <button type="button" class="rounded-md p-1 transition hover:bg-zinc-200/80" aria-label="History">
@@ -67,8 +67,8 @@ const submitPrompt = async () => {
 
       <main class="flex-1 space-y-4 overflow-y-auto pb-5">
         <div class="space-y-1">
-          <p class="text-2xl font-semibold text-blue-500">Hello!</p>
-          <p class="text-2xl font-medium text-zinc-400">How can I help you today?</p>
+          <p class="text-xl font-semibold text-blue-500">Hello!</p>
+          <p class="text-xl font-medium text-zinc-400">How can I help you today?</p>
         </div>
 
         <div v-if="messages.length" class="space-y-3 pt-3">
@@ -93,7 +93,7 @@ const submitPrompt = async () => {
         <div class="rounded-2xl border border-zinc-300 bg-zinc-200/70 px-4 py-3.5">
           <input
             v-model="prompt"
-            class="w-full bg-transparent text-lg text-zinc-700 placeholder:text-zinc-500 focus:outline-none"
+            class="w-full bg-transparent text-base text-zinc-700 placeholder:text-zinc-500 focus:outline-none"
             placeholder="Enter prompt here"
             :disabled="isSending"
           >
