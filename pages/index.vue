@@ -21,7 +21,7 @@ const query = ref('')
 const selectedStatuses = ref<string[]>([])
 const selectedTags = ref<string[]>([])
 const selectedBrands = ref<string[]>([])
-const isLoadingInitial = ref(false)
+const isLoadingInitial = ref(true)
 const isLoadingMore = ref(false)
 const errorMessage = ref('')
 const sentinelRef = ref<HTMLElement | null>(null)
@@ -87,9 +87,6 @@ async function fetchProductsBatch() {
 }
 
 async function loadInitialProducts() {
-  if (isLoadingInitial.value)
-    return
-
   clearError()
   isLoadingInitial.value = true
 
