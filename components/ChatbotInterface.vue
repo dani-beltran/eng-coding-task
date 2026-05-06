@@ -24,7 +24,7 @@ const submitPrompt = async () => {
   isSending.value = true
 
   try {
-    const response = await $fetch<{ reply: string }>('/api/chat', {
+    const response = await $fetch<{ reply: string, sources: string[] }>('/api/chat', {
       method: 'POST',
       body: {
         prompt: userPrompt,
@@ -35,7 +35,7 @@ const submitPrompt = async () => {
       },
     })
 
-    messages.value.push({ role: 'assistant', content: response.reply })
+    messages.value.push({ role: 'assistant', content: response.reply, sources: response.sources })
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unable to get a response right now.'
     errorMessage.value = message
@@ -86,6 +86,12 @@ const submitPrompt = async () => {
             :class="message.role === 'user' ? 'ml-10 bg-zinc-900 text-white' : 'mr-10 border border-zinc-300 bg-white text-zinc-800'"
           >
             {{ message.content }}
+            <div v-if="message.sources && message.sources.length" class="mt-2">
+              <span class="text-zinc-500">Product references:</span>
+              <ul  class="list-disc list-inside text-xs text-zinc-500">
+                <li v-for="(source, sourceIndex) in message.sources" :key="sourceIndex">{{ source }}</li>
+              </ul>
+            </div>
           </article>
         </div>
 
