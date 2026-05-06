@@ -29,7 +29,10 @@ interface ProductsResponse {
   limit: number
 }
 
-const PAGE_SIZE = 50
+// This forces the dummy API to return all products currently available, 
+// since we don't have the total number of products beforehand and it would missinform the user about the number of results.
+// NOTE: In a real-world scenario, you would typically implement server-side filtering and pagination or infinite scrolling.
+const PAGE_SIZE = 1000
 
 const products = ref<Product[]>([])
 const totalProducts = ref<number | null>(null)
