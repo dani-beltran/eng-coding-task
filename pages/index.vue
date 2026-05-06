@@ -207,10 +207,10 @@ onBeforeUnmount(() => {
     <section class="mx-auto max-w-[1320px] rounded-[30px] border border-slate-300/70 bg-[#f6f6f7] px-8 pb-12 pt-14 lg:px-10">
       <div class="mb-14 grid gap-8 lg:grid-cols-[1fr_auto] lg:items-start">
         <div>
-          <h1 class="text-5xl font-semibold tracking-tight text-slate-800">
+          <h1 class="text-2xl font-semibold tracking-tight text-slate-800">
             Explore Our Products
           </h1>
-          <p class="mt-4 max-w-2xl text-2xl text-slate-500">
+          <p class="mt-3 max-w-2xl text-base text-slate-500">
             Discover expert-led solutions to help you succeed in the cloud.
           </p>
         </div>
@@ -224,14 +224,14 @@ onBeforeUnmount(() => {
 
       <div class="grid gap-8 lg:grid-cols-[290px_minmax(0,1fr)]">
         <aside class="h-fit overflow-hidden rounded-2xl border border-slate-300 bg-[#f1f1f2]">
-          <div class="border-b border-slate-300 px-5 py-4 text-3xl font-semibold text-slate-900">
+          <div class="border-b border-slate-300 px-5 py-4 text-lg font-semibold text-slate-900">
             {{ resultCountLabel }}
           </div>
 
           <div class="border-b border-slate-300 px-5 py-5">
             <label
               for="search-products"
-              class="flex items-center gap-3 rounded-full border border-slate-300 bg-[#efefef] px-4 py-3 text-3xl text-slate-600"
+              class="flex items-center gap-3 rounded-full border border-slate-300 bg-[#efefef] px-4 py-3 text-base text-slate-600"
             >
               <svg
                 viewBox="0 0 24 24"
@@ -249,7 +249,7 @@ onBeforeUnmount(() => {
                 v-model="query"
                 type="text"
                 placeholder="Search"
-                class="w-full border-none bg-transparent text-2xl text-slate-700 placeholder:text-slate-500 focus:outline-none"
+                class="w-full border-none bg-transparent text-base text-slate-700 placeholder:text-slate-500 focus:outline-none"
               >
             </label>
           </div>
@@ -260,7 +260,7 @@ onBeforeUnmount(() => {
           >
             <AccordionItem value="status" class="border-b border-slate-300">
               <AccordionHeader>
-                <AccordionTrigger class="flex w-full items-center justify-between px-5 py-4 text-left text-3xl font-medium text-slate-700">
+                <AccordionTrigger class="flex w-full items-center justify-between px-5 py-4 text-left text-lg font-medium text-slate-700">
                   <span>Status</span>
                   <svg class="h-5 w-5 shrink-0 text-slate-500 transition-transform data-[state=open]:rotate-180" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                     <path d="M3.5 6.5L8 11L12.5 6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
@@ -272,7 +272,7 @@ onBeforeUnmount(() => {
                   <label
                     v-for="status in statusOptions"
                     :key="status"
-                    class="flex cursor-pointer items-center gap-3 text-xl text-slate-600"
+                    class="flex cursor-pointer items-center gap-3 text-base text-slate-600"
                   >
                     <CheckboxRoot
                       :value="status"
@@ -292,7 +292,7 @@ onBeforeUnmount(() => {
 
             <AccordionItem value="tags" class="border-b border-slate-300">
               <AccordionHeader>
-                <AccordionTrigger class="flex w-full items-center justify-between px-5 py-4 text-left text-3xl font-medium text-slate-700">
+                <AccordionTrigger class="flex w-full items-center justify-between px-5 py-4 text-left text-lg font-medium text-slate-700">
                   <span>Tags</span>
                   <svg class="h-5 w-5 shrink-0 text-slate-500 transition-transform data-[state=open]:rotate-180" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                     <path d="M3.5 6.5L8 11L12.5 6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
@@ -304,7 +304,7 @@ onBeforeUnmount(() => {
                   <label
                     v-for="tag in tagOptions"
                     :key="tag"
-                    class="flex cursor-pointer items-center gap-3 text-xl text-slate-600"
+                    class="flex cursor-pointer items-center gap-3 text-base text-slate-600"
                   >
                     <CheckboxRoot
                       :value="tag"
@@ -324,7 +324,7 @@ onBeforeUnmount(() => {
 
             <AccordionItem value="brand">
               <AccordionHeader>
-                <AccordionTrigger class="flex w-full items-center justify-between px-5 py-4 text-left text-3xl font-medium text-slate-700">
+                <AccordionTrigger class="flex w-full items-center justify-between px-5 py-4 text-left text-lg font-medium text-slate-700">
                   <span>Brand</span>
                   <svg class="h-5 w-5 shrink-0 text-slate-500 transition-transform data-[state=open]:rotate-180" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                     <path d="M3.5 6.5L8 11L12.5 6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
@@ -336,7 +336,7 @@ onBeforeUnmount(() => {
                   <label
                     v-for="brand in brandOptions"
                     :key="brand"
-                    class="flex cursor-pointer items-center gap-3 text-xl text-slate-600"
+                    class="flex cursor-pointer items-center gap-3 text-base text-slate-600"
                   >
                     <CheckboxRoot
                       :value="brand"
@@ -359,7 +359,7 @@ onBeforeUnmount(() => {
         <div>
           <div
             v-if="errorMessage"
-            class="mb-6 rounded-xl border border-red-300 bg-red-50 p-4 text-lg text-red-700"
+            class="mb-6 rounded-xl border border-red-300 bg-red-50 p-4 text-base text-red-700"
           >
             <p>{{ errorMessage }}</p>
             <button
@@ -406,14 +406,14 @@ onBeforeUnmount(() => {
                 >
               </div>
 
-              <h2 class="mt-5 line-clamp-2 text-[47px] font-semibold leading-[1.1] text-slate-800">
+              <h2 class="mt-5 line-clamp-2 text-xl font-semibold leading-[1.25] text-slate-800">
                 {{ product.title }}
               </h2>
-              <p class="mt-4 line-clamp-4 text-[38px] leading-[1.45] text-slate-500">
+              <p class="mt-3 line-clamp-4 text-sm leading-relaxed text-slate-500">
                 {{ product.description }}
               </p>
               <div class="mx-auto mt-8 h-px w-10 bg-slate-700/80" />
-              <p class="mt-3 text-center text-[49px] font-semibold text-slate-900">
+              <p class="mt-3 text-center text-2xl font-semibold text-slate-900">
                 {{ formatPrice(product.price) }}
               </p>
             </article>
@@ -439,8 +439,9 @@ onBeforeUnmount(() => {
             </div>
             <p
               v-else-if="!hasMoreProducts"
-              class="text-center text-lg text-slate-500"
-            >
+              class="text-center text-base text-slate-500"
+
+              >
               You've reached the end of the catalog.
             </p>
           </div>
