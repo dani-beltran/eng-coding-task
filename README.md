@@ -111,6 +111,7 @@ On the server, use `useRuntimeConfig(event)` (or `useRuntimeConfig()` in server 
 - I would implement FE e2e testing using a frameworks like Playwright(personally preferred) or Cypress.
 - I would add error handling and loading states to the UI to enhance the user experience, especially when fetching product data or generating responses from Gemini. This would involve showing spinners or error messages as appropriate.
 - I would experiment with different AI models and prompt engineering techniques to improve the quality and relevance of the assistant's responses.
+- In a production scenario, where each product has a detailed page, I would link the "Product references" in the assistant's responses to the corresponding product pages, allowing users to easily navigate to the products being discussed in the chat.
 
 ## License
 
