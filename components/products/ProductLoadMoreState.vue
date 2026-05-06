@@ -8,8 +8,14 @@ defineProps<{
 <template>
   <div
     v-if="isLoadingMore"
-    class="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3"
+    class="space-y-4"
   >
+    <div class="flex items-center justify-center gap-3 text-slate-600" aria-live="polite">
+      <span class="h-5 w-5 animate-spin rounded-full border-2 border-slate-500 border-t-transparent" />
+      <span class="text-sm font-medium">Loading more products...</span>
+    </div>
+
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-2 xl:grid-cols-3">
     <article
       v-for="skeleton in 3"
       :key="`load-more-skeleton-${skeleton}`"
@@ -19,6 +25,7 @@ defineProps<{
       <div class="mt-5 h-8 w-4/5 rounded bg-slate-200" />
       <div class="mt-3 h-6 w-2/3 rounded bg-slate-200" />
     </article>
+    </div>
   </div>
   <p
     v-else-if="!hasMoreProducts"
