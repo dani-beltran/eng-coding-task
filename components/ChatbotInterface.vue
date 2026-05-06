@@ -4,6 +4,7 @@ type ChatRole = 'user' | 'assistant'
 type ChatMessage = {
   role: ChatRole
   content: string
+  sources?: string[]
 }
 
 const prompt = ref('')
@@ -25,7 +26,13 @@ const submitPrompt = async () => {
   try {
     const response = await $fetch<{ reply: string }>('/api/chat', {
       method: 'POST',
-      body: { prompt: userPrompt },
+      body: {
+        prompt: userPrompt,
+        history: messages.value.slice(-10).map(message => ({
+          role: message.role,
+          content: message.content,
+        })),
+      },
     })
 
     messages.value.push({ role: 'assistant', content: response.reply })

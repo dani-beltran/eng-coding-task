@@ -5,5 +5,6 @@ export default defineNuxtConfig({
   modules: ['@nuxtjs/tailwindcss', 'reka-ui/nuxt'],
   runtimeConfig: {
     geminiApiKey: process.env.GEMINI_API_KEY,
+    geminiModel: process.env.GEMINI_MODEL ?? 'gemini-3.1-flash-lite-preview',
   },
 })

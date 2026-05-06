@@ -29,11 +29,6 @@ interface ProductsResponse {
   limit: number
 }
 
-// This forces the dummy API to return all products currently available, 
-// since we don't have the total number of products beforehand and it would missinform the user about the number of results.
-// NOTE: In a real-world scenario, you would typically implement server-side filtering and pagination or infinite scrolling.
-const PAGE_SIZE = 1000
-
 const products = ref<Product[]>([])
 const totalProducts = ref<number | null>(null)
 const loadedCount = ref(0)
@@ -102,15 +97,8 @@ function clearError() {
   errorMessage.value = ''
 }
 
-async function fetchProductsBatch(skip: number) {
-  const response = await $fetch<ProductsResponse>('https://dummyjson.com/products', {
-    query: {
-      limit: PAGE_SIZE,
-      skip,
-    },
-  })
-
-  return response
+async function fetchProductsBatch() {
+  return $fetch<ProductsResponse>('/api/products', {})
 }
 
 async function loadInitialProducts() {
@@ -121,7 +109,7 @@ async function loadInitialProducts() {
   isLoadingInitial.value = true
 
   try {
-    const response = await fetchProductsBatch(0)
+    const response = await fetchProductsBatch()
     products.value = response.products
     totalProducts.value = response.total
     loadedCount.value = response.products.length
@@ -143,7 +131,7 @@ async function loadMoreProducts() {
   isLoadingMore.value = true
 
   try {
-    const response = await fetchProductsBatch(loadedCount.value)
+    const response = await fetchProductsBatch()
     products.value = [...products.value, ...response.products]
     totalProducts.value = response.total
     loadedCount.value += response.products.length

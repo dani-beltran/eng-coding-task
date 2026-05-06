@@ -4,9 +4,11 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 type PromptGeminiOptions = {
   model?: string;
   systemInstruction?: string;
+  temperature?: number;
+  responseMimeType?: string;
 };
 
-const DEFAULT_MODEL = "gemini-2.5-flash";
+const DEFAULT_MODEL = "gemini-3.1-flash-lite-preview";
 const geminiClientsByApiKey = new Map<string, GoogleGenerativeAI>();
 
 export class GeminiService {
@@ -44,6 +46,10 @@ export class GeminiService {
       const model = this.client.getGenerativeModel({
         model: options.model ?? DEFAULT_MODEL,
         systemInstruction: options.systemInstruction,
+        generationConfig: {
+          temperature: options.temperature,
+          responseMimeType: options.responseMimeType,
+        },
       });
 
       const result = await model.generateContent(prompt);
