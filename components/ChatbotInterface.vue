@@ -11,14 +11,16 @@ const prompt = ref('')
 const isSending = ref(false)
 const errorMessage = ref('')
 const messages = ref<ChatMessage[]>([])
+const lastSubmittedPrompt = ref('')
 
-const submitPrompt = async () => {
-  if (!prompt.value.trim() || isSending.value) {
+const sendPrompt = async (rawPrompt: string) => {
+  const userPrompt = rawPrompt.trim()
+  if (!userPrompt || isSending.value) {
     return
   }
 
-  const userPrompt = prompt.value.trim()
   errorMessage.value = ''
+  lastSubmittedPrompt.value = userPrompt
   messages.value.push({ role: 'user', content: userPrompt })
   prompt.value = ''
   isSending.value = true
@@ -42,6 +44,14 @@ const submitPrompt = async () => {
   } finally {
     isSending.value = false
   }
+}
+
+const submitPrompt = async () => {
+  await sendPrompt(prompt.value)
+}
+
+const retryLastPrompt = async () => {
+  await sendPrompt(lastSubmittedPrompt.value)
 }
 </script>
 
@@ -95,8 +105,25 @@ const submitPrompt = async () => {
           </article>
         </div>
 
+        <article
+          v-if="isSending"
+          class="mr-10 flex items-center gap-3 rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm text-zinc-700"
+          aria-live="polite"
+        >
+          <span class="h-4 w-4 animate-spin rounded-full border-2 border-blue-500 border-t-transparent" />
+          <span>Generating response...</span>
+        </article>
+
         <p v-if="errorMessage" class="rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">
-          {{ errorMessage }}
+          Something went wrong!
+          <button
+            v-if="lastSubmittedPrompt"
+            type="button"
+            class="mt-2 block text-sm font-semibold text-rose-700 underline"
+            @click="retryLastPrompt"
+          >
+            Try again
+          </button>
         </p>
       </main>
     </div>
