@@ -22,6 +22,7 @@ Baseline app for a hands-on interview. **Scope and edge cases are clarified live
    ```
 
    Set `GEMINI_API_KEY` in `.env`. The key is read as **server-only** runtime config (`runtimeConfig.geminiApiKey` in `nuxt.config.ts`). **Do not** expose it to the client or call Gemini from the browser with this key.
+   You can optionally set `GEMINI_MODEL` (default: `gemini-3.1-flash-lite-preview`).
 
 3. Start the dev server:
 
@@ -100,6 +101,16 @@ sequenceDiagram
 ```
 
 On the server, use `useRuntimeConfig(event)` (or `useRuntimeConfig()` in server context) to read `geminiApiKey` — **only** in server code.
+
+
+## Follow-ups
+- I would improve the chat assistant UX using Streaming for its reponses, so it feels more responsive and dynamic. This would involve using the Gemini API's streaming capabilities and updating the frontend to handle and display streaming data.
+- If I had access to the product catalog API code, I would implement pagination and filtering from there, rather than fetching a fixed batch of products. This would allow for a more scalable and user-friendly storefront, especially as the number of products grows. MORE IMPORTANTLY, it will also prevent the product catalog from being stale, as it would fetch the latest data on demand rather than relying on a single batch fetched at startup, specially important for filtering by availability status.
+- Fetching the whole catalog on every chat request is not ideal for performance, but it ensures the data is always up to date, specially the product availability status, which is important for the user experience and can change frequently. In a real implementation, we would ideally have a more efficient way to query the catalog for relevant products based on the prompt and conversation history, rather than fetching everything and relying on Gemini to pick the relevant info. This could be done by implementing a search or filter API in the catalog service that Gemini can call to retrieve only the necessary data, or by using embeddings and vector search for better relevance.
+- I would refactor the index page into smaller, reusable components to improve maintainability and readability. This would also make it easier to manage state and props across the application.
+- I would implement FE e2e testing using a frameworks like Playwright(personally preferred) or Cypress.
+- I would add error handling and loading states to the UI to enhance the user experience, especially when fetching product data or generating responses from Gemini. This would involve showing spinners or error messages as appropriate.
+- I would experiment with different AI models and prompt engineering techniques to improve the quality and relevance of the assistant's responses.
 
 ## License
 
