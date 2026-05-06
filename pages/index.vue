@@ -179,8 +179,8 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <main class="bg-[#f3f3f4] p-6 text-slate-900 lg:p-8">
-    <section class="mx-auto max-w-[1320px] rounded-[30px] border border-slate-300/70 bg-[#f6f6f7] px-8 pb-12 pt-14 lg:px-10">
+  <main class="text-slate-900 pt-10 pb-20">
+    <section class="mx-auto rounded-[30px] border border-slate-300/70 bg-[#f6f6f7] px-8 pb-12 pt-14 lg:px-10">
       <ProductCatalogHero />
 
       <div class="grid gap-8 lg:grid-cols-[290px_minmax(0,1fr)]">
