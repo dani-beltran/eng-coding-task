@@ -208,7 +208,7 @@ onBeforeUnmount(() => {
 <template>
   <main class="bg-[#f3f3f4] p-6 text-slate-900 lg:p-8">
     <section class="mx-auto max-w-[1320px] rounded-[30px] border border-slate-300/70 bg-[#f6f6f7] px-8 pb-12 pt-14 lg:px-10">
-      <div class="mb-14 grid gap-8 lg:grid-cols-[1fr_auto] lg:items-start">
+      <div class="mb-14 grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
         <div>
           <h1 class="text-2xl font-semibold tracking-tight text-slate-800">
             Explore Our Products
@@ -221,7 +221,7 @@ onBeforeUnmount(() => {
         <img
           src="/assets/asset-ui.png"
           alt="Productivity illustration"
-          class="h-auto w-full max-w-[360px] self-start justify-self-end"
+          class="h-auto w-full max-w-[360px] max-h-[280px] self-start justify-self-end"
         >
       </div>
 
