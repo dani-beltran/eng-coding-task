@@ -25,11 +25,11 @@ type NavItem = 'home' | 'search' | 'integrations' | 'workspace' | 'docs' | 'proj
 
 const activeItem = ref<NavItem>('workspace')
 
-function setActiveItem(item: NavItem) {
+const setActiveItem = (item: NavItem) => {
   activeItem.value = item
 }
 
-function buttonClasses(item: NavItem) {
+const buttonClasses = (item: NavItem) => {
   const baseClasses = 'flex h-16 w-16 items-center justify-center rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#3794ff]/50'
 
   if (activeItem.value === item) {
