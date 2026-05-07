@@ -1,13 +1,6 @@
 import { GeminiService } from '../services/gemini.service'
 import { fetchCatalog } from '../services/catalog.service'
-
-type ChatRequest = {
-  prompt?: string
-  history?: Array<{
-    role: 'user' | 'assistant'
-    content: string
-  }>
-}
+import { z, type ZodIssue } from 'zod'
 
 type GroundingProduct = {
   id: number
@@ -32,31 +25,34 @@ type GroundingProduct = {
 }
 
 const MAX_HISTORY_MESSAGES = 10
+const MAX_PROMPT_LENGTH = 20_000
+const MAX_HISTORY_MESSAGE_LENGTH = 20_000
 const FIXED_NOT_IN_CATALOG_REPLY = 'We are sorry, but that information is not in our product catalog. Please let us know if there is anything else we can assist you with.'
 
-/**
- * Normalizes the conversation history by ensuring it is an array of valid messages with the expected structure, 
- * filtering out any invalid entries, trimming content, and limiting the number of messages to the most recent ones. 
- * This helps maintain a clean and relevant conversation context for the Gemini model while preventing issues with 
- * malformed data or excessively long histories that could exceed model input limits.
- */
-const normalizeHistory = (history: ChatRequest['history']) => {
-  if (!Array.isArray(history)) {
-    return []
+type ValidatedChatRequest = z.infer<typeof chatRequestSchema>
+
+const historyMessageSchema = z.object({
+  role: z.enum(['user', 'assistant']),
+  content: z.string().trim().min(1).max(MAX_HISTORY_MESSAGE_LENGTH),
+})
+
+const chatRequestSchema = z.object({
+  prompt: z.string().trim().min(1).max(MAX_PROMPT_LENGTH),
+  history: z.array(historyMessageSchema).max(MAX_HISTORY_MESSAGES).optional().default([]),
+})
+
+const validateChatRequest = (body: unknown): ValidatedChatRequest => {
+  const parsed = chatRequestSchema.safeParse(body)
+
+  if (!parsed.success) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: 'Invalid request body',
+      data: parsed.error.issues.map((issue: ZodIssue) => issue.message).join('; '),
+    })
   }
 
-  return history
-    .filter(message => (
-      message
-      && (message.role === 'user' || message.role === 'assistant')
-      && typeof message.content === 'string'
-      && message.content.trim().length > 0
-    ))
-    .slice(-MAX_HISTORY_MESSAGES)
-    .map(message => ({
-      role: message.role,
-      content: message.content.trim(),
-    }))
+  return parsed.data
 }
 
 /**
@@ -111,17 +107,11 @@ const parseJsonReply = (text: string) => {
 }
 
 export default defineEventHandler(async (event) => {
-  const body = await readBody<ChatRequest>(event)
-  const prompt = body.prompt?.trim() ?? ''
-  if (!prompt) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: 'Prompt is required',
-    })
-  }
+  const body = await readBody<unknown>(event)
+  const validated = validateChatRequest(body)
 
   try {
-    const history = normalizeHistory(body.history)
+    const { prompt, history } = validated
     const config = useRuntimeConfig(event)
     // Fetching the whole catalog on every request is not ideal for performance, but it ensures the data is always up to date,
     // specially the availability status, which is important for the user experience and can change frequently. 
