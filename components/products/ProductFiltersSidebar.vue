@@ -2,6 +2,7 @@
 import { AccordionRoot } from 'reka-ui'
 import { computed } from 'vue'
 import FilterCheckboxSection from '~/components/products/FilterCheckboxSection.vue'
+import searchIcon from '~/assets/icons/search.svg'
 
 const props = defineProps<{
   resultCountLabel: string
@@ -53,17 +54,7 @@ const brandsModel = computed({
         for="search-products"
         class="flex items-center gap-3 rounded-full border border-slate-300 bg-[#efefef] px-4 py-3 text-base text-slate-600"
       >
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          class="h-5 w-5"
-          aria-hidden="true"
-        >
-          <circle cx="11" cy="11" r="7" />
-          <path d="M20 20L16.65 16.65" />
-        </svg>
+        <img :src="searchIcon" alt="" class="h-5 w-5" aria-hidden="true">
         <input
           id="search-products"
           v-model="searchQuery"
