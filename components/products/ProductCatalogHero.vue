@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-14 grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
+  <div class="mb-20 pt-5 pb-10 grid gap-8 lg:grid-cols-[1fr_auto] lg:items-center">
     <div>
       <h1 class="text-2xl font-semibold tracking-tight text-slate-800">
         Explore Our Products
