@@ -1,4 +1,5 @@
 import { fetchCatalog } from '../services/catalog.service'
+import { toGroundingProducts } from '../shared/grounding-product'
 
 export default defineEventHandler(async () => {
   // Always return the whole catalog for simplicity, as the dummy API doesn't support filtering or pagination. 
@@ -6,7 +7,7 @@ export default defineEventHandler(async () => {
   const catalog = await fetchCatalog()
 
   return {
-    products: catalog.products,
+    products: toGroundingProducts(catalog.products),
     total: catalog.total,
   }
 })
