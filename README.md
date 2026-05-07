@@ -102,16 +102,23 @@ sequenceDiagram
 
 On the server, use `useRuntimeConfig(event)` (or `useRuntimeConfig()` in server context) to read `geminiApiKey` — **only** in server code.
 
+## Key decisions and trade-offs
+- I chose to fetch the entire product catalog on the server and pass it as context to Gemini for each chat request. This is simple and ensures that Gemini has all the information it needs to answer questions about any product, but it is not the most efficient approach, especially as the catalog grows. In the follow-ups, I discus what I would do to improve this.
+- I limited the chat endpoint prompts and history message length to prevent excessively long inputs to Gemini, which could lead to performance issues or hitting token limits. This is a trade-off between providing enough context for good answers and keeping the system responsive and affordable.
+- I included product SKU references in the assistant's responses to make it easier for users to identify which products are being discussed, especially when there are multiple similar products. This also allows for potential future enhancements, such as linking to product pages. This is also discussed in the follow-ups.
+- I implemented an endpoint for the product catalog that transforms the raw data from DummyJSON into a more structured format suitable for grounding Gemini responses and filtering out sensitive information. This adds some overhead but helps ensure that the data is clean and consistent for the model and prevents leaking any sensitive information, like emails.
+
 
 ## Follow-ups
 - I would improve the chat assistant UX using Streaming for its reponses, so it feels more responsive and dynamic. This would involve using the Gemini API's streaming capabilities and updating the frontend to handle and display streaming data.
 - If I had access to the product catalog API code, I would implement pagination and filtering from there, rather than fetching a fixed batch of products. This would allow for a more scalable and user-friendly storefront, especially as the number of products grows. MORE IMPORTANTLY, it will also prevent the product catalog from being stale, as it would fetch the latest data on demand rather than relying on a single batch fetched at startup, specially important for filtering by availability status.
 - Fetching and feeding the whole catalog on every chat request is not ideal for performance, but it ensures the data is always up to date, specially the product availability status, which is important for the user experience and can change frequently. In a real implementation, with a far bigger catalog, we would ideally have a more efficient way to query the catalog for relevant products based on the prompt and conversation history, rather than fetching everything and relying on Gemini to pick the relevant info. This could be done by implementing a search or filter API in the catalog service that Gemini can call to retrieve only the necessary data, or by using embeddings and vector search for better relevance.
-- I would refactor the index page into smaller, reusable components to improve maintainability and readability. This would also make it easier to manage state and props across the application.
 - I would implement FE e2e testing using a frameworks like Playwright(personally preferred) or Cypress.
-- I would add error handling and loading states to the UI to enhance the user experience, especially when fetching product data or generating responses from Gemini. This would involve showing spinners or error messages as appropriate.
 - I would experiment with different AI models and prompt engineering techniques to improve the quality and relevance of the assistant's responses.
 - In a production scenario, where each product has a detailed page, I would link the "Product references" in the assistant's responses to the corresponding product pages, allowing users to easily navigate to the products being discussed in the chat.
+- I would implement API Rate limiting strategies to ensure that the application remains responsive and to prevent abuse, especially for the chat endpoint that interacts with Gemini.
+- I would implement CORS policies and other security measures to protect the API endpoints and ensure that only authorized clients can access them.
+- I would use the Figma MCP to better match the design and ensure that the UI is pixel-perfect. I could not do this, since I lost the password to the design page.
 
 ## License
 
