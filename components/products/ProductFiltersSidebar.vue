@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { AccordionRoot } from 'reka-ui'
-import { computed } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import FilterCheckboxSection from '~/components/products/FilterCheckboxSection.vue'
 import searchIcon from '~/assets/icons/search.svg'
 
@@ -41,6 +41,27 @@ const brandsModel = computed({
   get: () => props.selectedBrands,
   set: value => emit('update:selectedBrands', value),
 })
+
+const FILTER_ACCORDION_STORAGE_KEY = 'product-filters-open-sections'
+const FILTER_SECTIONS = ['status', 'tags', 'brand'] as const
+type FilterSection = (typeof FILTER_SECTIONS)[number]
+
+const openedSections = ref<FilterSection[]>([])
+
+onMounted(() => {
+  const storedValue = localStorage.getItem(FILTER_ACCORDION_STORAGE_KEY)
+
+  if (!storedValue)
+    return
+
+  openedSections.value = storedValue
+    .split(',')
+    .filter((section): section is FilterSection => FILTER_SECTIONS.includes(section as FilterSection))
+})
+
+watch(openedSections, (sections) => {
+  localStorage.setItem(FILTER_ACCORDION_STORAGE_KEY, sections.join(','))
+}, { deep: true })
 </script>
 
 <template>
@@ -67,7 +88,7 @@ const brandsModel = computed({
 
     <AccordionRoot
       type="multiple"
-      :default-value="['status', 'tags', 'brand']"
+      v-model="openedSections"
     >
       <FilterCheckboxSection
         section-value="status"
