@@ -28,6 +28,18 @@ const sentinelRef = ref<HTMLElement | null>(null)
 
 let observer: IntersectionObserver | null = null
 
+const STATUS_FILTER_STORAGE_KEY = 'product-status-filters'
+const TAG_FILTER_STORAGE_KEY = 'product-tag-filters'
+const BRAND_FILTER_STORAGE_KEY = 'product-brand-filters'
+
+const readStoredFilterValues = (key: string) => {
+  const storedValue = localStorage.getItem(key)
+  if (!storedValue)
+    return []
+
+  return storedValue.split(',').filter(Boolean)
+}
+
 const statusOptions = computed(() =>
   Array.from(new Set(products.value.map(product => product.availabilityStatus))).sort(),
 )
@@ -74,19 +86,19 @@ const productPriceFormatter = new Intl.NumberFormat('en-US', {
   currency: 'USD',
 })
 
-function formatPrice(price: number) {
+const formatPrice = (price: number) => {
   return productPriceFormatter.format(price)
 }
 
-function clearError() {
+const clearError = () => {
   errorMessage.value = ''
 }
 
-async function fetchProductsBatch() {
+const fetchProductsBatch = async () => {
   return $fetch<ProductsResponse>('/api/products', {})
 }
 
-async function loadInitialProducts() {
+const loadInitialProducts = async () => {
   clearError()
   isLoadingInitial.value = true
 
@@ -105,7 +117,7 @@ async function loadInitialProducts() {
   }
 }
 
-async function loadMoreProducts() {
+const loadMoreProducts = async () => {
   if (isLoadingMore.value || isLoadingInitial.value || !hasMoreProducts.value)
     return
 
@@ -127,7 +139,7 @@ async function loadMoreProducts() {
   }
 }
 
-function retryLoad() {
+const retryLoad = () => {
   if (products.value.length === 0) {
     void loadInitialProducts()
     return
@@ -136,7 +148,7 @@ function retryLoad() {
   void loadMoreProducts()
 }
 
-function setupObserver() {
+const setupObserver = () => {
   if (observer) {
     observer.disconnect()
     observer = null
@@ -164,10 +176,35 @@ watch(sentinelRef, () => {
 })
 
 onMounted(async () => {
+  selectedStatuses.value = readStoredFilterValues(STATUS_FILTER_STORAGE_KEY)
+  selectedTags.value = readStoredFilterValues(TAG_FILTER_STORAGE_KEY)
+  selectedBrands.value = readStoredFilterValues(BRAND_FILTER_STORAGE_KEY)
+
   await loadInitialProducts()
   await nextTick()
   setupObserver()
 })
+
+watch(selectedStatuses, (values) => {
+  if (!import.meta.client)
+    return
+
+  localStorage.setItem(STATUS_FILTER_STORAGE_KEY, values.join(','))
+}, { deep: true })
+
+watch(selectedTags, (values) => {
+  if (!import.meta.client)
+    return
+
+  localStorage.setItem(TAG_FILTER_STORAGE_KEY, values.join(','))
+}, { deep: true })
+
+watch(selectedBrands, (values) => {
+  if (!import.meta.client)
+    return
+
+  localStorage.setItem(BRAND_FILTER_STORAGE_KEY, values.join(','))
+}, { deep: true })
 
 onBeforeUnmount(() => {
   observer?.disconnect()

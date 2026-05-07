@@ -107,6 +107,7 @@ On the server, use `useRuntimeConfig(event)` (or `useRuntimeConfig()` in server 
 - I limited the chat endpoint prompts and history message length to prevent excessively long inputs to Gemini, which could lead to performance issues or hitting token limits. This is a trade-off between providing enough context for good answers and keeping the system responsive and affordable.
 - I included product SKU references in the assistant's responses to make it easier for users to identify which products are being discussed, especially when there are multiple similar products. This also allows for potential future enhancements, such as linking to product pages. This is also discussed in the follow-ups.
 - I implemented an endpoint for the product catalog that transforms the raw data from DummyJSON into a more structured format suitable for grounding Gemini responses and filtering out sensitive information. This adds some overhead but helps ensure that the data is clean and consistent for the model and prevents leaking any sensitive information, like emails.
+- Implemented persistent filter state for the storefront, so that users can easily navigate between different products without losing their place. This improves the user experience and makes it easier to navigate the catalog, especially as it grows larger.
 
 
 ## Follow-ups
