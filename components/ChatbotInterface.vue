@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import sparkIcon from '~/assets/icons/spark.svg'
 type ChatRole = 'user' | 'assistant'
 
 type ChatMessage = {
@@ -60,9 +61,7 @@ const retryLastPrompt = async () => {
     <div class="flex min-h-0 w-full flex-1 flex-col p-5 pb-0">
       <header class="mb-6 flex items-center justify-between">
         <div class="flex items-center gap-2.5">
-          <svg viewBox="0 0 24 24" class="h-6 w-6 text-blue-500" fill="currentColor" aria-hidden="true">
-            <path d="M12 2c1.8 4.4 5.6 8.2 10 10-4.4 1.8-8.2 5.6-10 10-1.8-4.4-5.6-8.2-10-10 4.4-1.8 8.2-5.6 10-10z" />
-          </svg>
+          <img :src="sparkIcon" alt="Helper icon" class="h-6 w-6">
           <h1 class="text-xl font-medium tracking-tight">Helper</h1>
         </div>
         <div class="flex items-center gap-4 text-zinc-700">
@@ -84,7 +83,7 @@ const retryLastPrompt = async () => {
 
       <main class="flex-1 space-y-4 overflow-y-auto pb-5">
         <div class="space-y-1">
-          <p class="text-xl font-semibold text-blue-500">Hello!</p>
+          <p class="bg-gradient-to-r from-0% from-blue-500 to-40% to-fuchsia-400 bg-clip-text text-xl font-semibold text-transparent">Hello!</p>
           <p class="text-xl font-medium text-zinc-400">How can I help you today?</p>
         </div>
 
