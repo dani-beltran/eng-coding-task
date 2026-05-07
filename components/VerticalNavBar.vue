@@ -2,7 +2,6 @@
 import {
   AvatarFallback,
   AvatarRoot,
-  Separator,
   ToolbarButton,
   ToolbarRoot,
   ToolbarSeparator,
