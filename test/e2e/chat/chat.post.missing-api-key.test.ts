@@ -26,6 +26,6 @@ describe('POST /api/chat without GEMINI_API_KEY', () => {
 
     expect(response.status).toBe(500)
     const body = await response.json()
-    expect(body.statusMessage).toBe('Gemini API key is not configured')
+    expect(body.statusMessage).toBe('Error generating response from Chat Assistant')
   })
 })

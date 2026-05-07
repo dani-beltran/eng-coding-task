@@ -26,6 +26,7 @@ describe('POST /api/chat with empty prompt', () => {
 
     expect(response.status).toBe(400)
     const body = await response.json()
-    expect(body.statusMessage).toBe('Prompt is required')
+    expect(body.statusMessage).toBe('Invalid request body')
+    expect(body.data).toBe('Too small: expected string to have >=1 characters')
   })
 })
